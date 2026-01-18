@@ -13,7 +13,7 @@
 /**
  * Enable lives and the lives counter. The number next to the define is the number of lives you start with.
  */
-// #define ENABLE_LIVES 4
+#define ENABLE_LIVES 4
 
 /**
  * This can be 0..127.
@@ -53,7 +53,7 @@
 /**
  * Number of possible unique model ID's (keep it higher than 256).
  */
-#define MODEL_ID_COUNT 256
+#define MODEL_ID_COUNT 512
 
 /**
  * Number of supported areas per level.

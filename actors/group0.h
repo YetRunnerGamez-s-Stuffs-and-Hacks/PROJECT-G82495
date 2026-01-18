@@ -16,6 +16,8 @@ extern const Gfx burn_smoke_seg4_sub_dl_model[];
 extern const Gfx burn_smoke_seg4_sub_dl_end[];
 extern const Gfx burn_smoke_seg4_dl[];
 
+#include "luigi/geo_header.h"
+
 // mario
 extern const GeoLayout mario_geo_face_and_wings[];
 extern const GeoLayout mario_geo_left_hand[];
@@ -330,5 +332,6 @@ extern const Gfx white_particle_small_dl_begin[];
 extern const Gfx white_particle_small_dl_end[];
 extern const Gfx white_particle_small_dl[];
 extern const Gfx white_particle_small_unused_dl[];
+
 
 #endif

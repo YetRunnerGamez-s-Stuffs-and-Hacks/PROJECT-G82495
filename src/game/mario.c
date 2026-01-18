@@ -33,6 +33,9 @@
 #include "sound_init.h"
 #include "rumble_init.h"
 
+extern struct DmaHandlerList gLuigiAnimsBuf;
+
+s8 gIsLuigi = 0;
 
 /**************************************************
  *                    ANIMATIONS                  *
@@ -1699,6 +1702,28 @@ void queue_rumble_particles(struct MarioState *m) {
 }
 #endif
 
+static void mario_toggle_model_on_L(struct MarioState *m) {
+    // L button = Z_TRIG in some forks; but most have L_TRIG.
+    // Try L_TRIG first.
+    if (m->controller->buttonPressed & L_TRIG) {
+        gIsLuigi ^= 1;
+// swap animation source
+    // m->animList = gIsLuigi ? &gLuigiAnimsBuf : &gMarioAnimsBuf;
+
+    // force animation refresh
+    // if (m->marioObj) {
+    //     m->marioObj->header.gfx.animInfo.animID = -1;
+    //     m->marioObj->header.gfx.animInfo.curAnim = NULL;
+    //
+    // }
+        // Swap the model for Mario's object
+        if (m->marioObj) {
+            m->marioObj->header.gfx.sharedChild =
+                gLoadedGraphNodes[gIsLuigi ? MODEL_LUIGI : MODEL_MARIO];
+        }
+    }
+}
+
 /**
  * Main function for executing Mario's behavior. Returns particleFlags.
  */
@@ -1709,6 +1734,8 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
     vec3f_get_dist_and_angle(gMarioState->prevPos, gMarioState->pos, &gMarioState->moveSpeed, &gMarioState->movePitch, &gMarioState->moveYaw);
     vec3f_get_lateral_dist(gMarioState->prevPos, gMarioState->pos, &gMarioState->lateralSpeed);
     vec3f_copy(gMarioState->prevPos, gMarioState->pos);
+
+    mario_toggle_model_on_L(gMarioState);
 
     if (gMarioState->action) {
 #ifdef ENABLE_DEBUG_FREE_MOVE

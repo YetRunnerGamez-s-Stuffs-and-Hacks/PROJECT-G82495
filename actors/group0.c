@@ -5,7 +5,10 @@
 
 #include "make_const_nonconst.h"
 
-// Note: This bin does not use bin IDs, unlike the other segmented bins.
+// Note: This bin does not use bin IDs, unlike the other segmented bins.]
+#include "luigi/model.inc.c"
+//#include "luigi/anims/luigi_anims.c"
+
 #include "mario/model.inc.c"
 
 #include "bubble/model.inc.c"
@@ -30,3 +33,4 @@
 #include "src/s2d_engine/s2d_config.h"
 #include FONT_C_FILE
 #endif
+

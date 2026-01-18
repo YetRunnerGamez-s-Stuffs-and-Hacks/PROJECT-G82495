@@ -70,10 +70,10 @@ s8  gAudioEnabled      = TRUE;
 u32 gNumVblanks        = 0;
 s8  gResetTimer        = 0;
 s8  gNmiResetBarsTimer = 0;
-s8  gDebugLevelSelect  = FALSE;
+s8  gDebugLevelSelect  = TRUE;
 
 #ifdef VANILLA_DEBUG
-s8 gShowDebugText = FALSE;
+s8 gShowDebugText = TRUE;
 
 // unused
 UNUSED static u16 sDebugTextKeySequence[] = {
