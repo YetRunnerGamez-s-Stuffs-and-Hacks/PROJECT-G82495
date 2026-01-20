@@ -70,13 +70,13 @@ s8  gAudioEnabled      = TRUE;
 u32 gNumVblanks        = 0;
 s8  gResetTimer        = 0;
 s8  gNmiResetBarsTimer = 0;
-s8  gDebugLevelSelect  = TRUE;
+s8  gDebugLevelSelect  = FALSE;
 
 #ifdef VANILLA_DEBUG
 s8 gShowDebugText = TRUE;
 
 // unused
-UNUSED static u16 sDebugTextKeySequence[] = {
+static u16 sDebugTextKeySequence[] = {
     D_JPAD, D_JPAD, U_JPAD, U_JPAD, L_JPAD, R_JPAD, L_JPAD, R_JPAD
 };
 static s16 sDebugTextKey = 0;

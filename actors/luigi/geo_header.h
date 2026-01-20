@@ -1,235 +1,101 @@
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt0_000_switch_headmodel_opt1_switchboneExpression_opt1[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt0_000_switch_headmodel_opt1_switchboneExpression_opt2[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt0_000_switch_headmodel_opt1_switchboneExpression_opt3[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt0_000_switch_headmodel_opt1_switchboneExpression_opt4[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt0_000_switch_headmodel_opt1_switchboneExpression_opt5[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt0_000_switch_headmodel_opt1_switchboneExpression_opt6[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt0_000_switch_headmodel_opt1_switchboneExpression_opt7[];
-extern const GeoLayout luigi_Head_NOCAP_Armature[];
-extern const GeoLayout luigi_LeftHand_OPEN_Armature[];
-extern const GeoLayout luigi_RightHand_OPEN_Armature[];
-extern const GeoLayout luigi_RightHand_PEACE_Armature[];
-extern const GeoLayout luigi_RightHand_CAP_Armature[];
-extern const GeoLayout luigi_RightHand_CAP_WING_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_000_switch_headmodel_opt1_switchboneExpression_opt1[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_000_switch_headmodel_opt1_switchboneExpression_opt2[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_000_switch_headmodel_opt1_switchboneExpression_opt3[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_000_switch_headmodel_opt1_switchboneExpression_opt4[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_000_switch_headmodel_opt1_switchboneExpression_opt5[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_000_switch_headmodel_opt1_switchboneExpression_opt6[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_000_switch_headmodel_opt1_switchboneExpression_opt7[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_jump_luigi_Head_NOCAP_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_jump_luigi_LeftHand_OPEN_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_jump_luigi_RightHand_OPEN_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_jump_luigi_RightHand_PEACE_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_jump_luigi_RightHand_CAP_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_jump_luigi_RightHand_CAP_WING_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_000_switch_headmodel_opt0_000_switch_001_expressions_opt1[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_000_switch_headmodel_opt0_000_switch_001_expressions_opt2[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_000_switch_headmodel_opt0_000_switch_001_expressions_opt3[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_000_switch_headmodel_opt0_000_switch_001_expressions_opt4[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_000_switch_headmodel_opt0_000_switch_001_expressions_opt5[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_000_switch_headmodel_opt0_000_switch_001_expressions_opt6[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1_000_switch_headmodel_opt0_000_switch_001_expressions_opt7[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt1[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt2_jump_luigi_Head_NOCAP_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt2_jump_luigi_LeftHand_OPEN_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt2_jump_luigi_RightHand_OPEN_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt2_jump_luigi_RightHand_PEACE_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt2_jump_luigi_RightHand_CAP_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt2_jump_luigi_RightHand_CAP_WING_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt2[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt3_jump_luigi_Head_NOCAP_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt3_jump_luigi_LeftHand_OPEN_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt3_jump_luigi_RightHand_OPEN_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt3_jump_luigi_RightHand_PEACE_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt3_jump_luigi_RightHand_CAP_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt3_jump_luigi_RightHand_CAP_WING_Armature[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt3[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt0_000_switch_headmodel_opt0_000_switch_001_expressions_opt1[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt0_000_switch_headmodel_opt0_000_switch_001_expressions_opt2[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt0_000_switch_headmodel_opt0_000_switch_001_expressions_opt3[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt0_000_switch_headmodel_opt0_000_switch_001_expressions_opt4[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt0_000_switch_headmodel_opt0_000_switch_001_expressions_opt5[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt0_000_switch_headmodel_opt0_000_switch_001_expressions_opt6[];
-extern const GeoLayout luigi_002_switch_opt0_001_switch_opt0_000_switch_headmodel_opt0_000_switch_001_expressions_opt7[];
+#ifndef LUIGI_GEO_HEADER_H
+#define LUIGI_GEO_HEADER_H
+
+#include "types.h"
+
+/**
+ * Geo layouts (from your geo.inc.c)
+ */
+extern const GeoLayout luigi_geo_face_and_wings[];
+extern const GeoLayout luigi_geo_left_hand[];
+extern const GeoLayout luigi_geo_right_hand[];
+extern const GeoLayout luigi_geo_body[];
+
+
+extern const GeoLayout luigi_vanish_geo_face_and_wings[];
+extern const GeoLayout luigi_vanish_geo_left_hand[];
+extern const GeoLayout luigi_vanish_geo_right_hand[];
+extern const GeoLayout luigi_vanish_geo_body[];
+
+extern const GeoLayout luigi_metal_geo_face_and_wings[];
+extern const GeoLayout luigi_metal_geo_left_hand[];
+extern const GeoLayout luigi_metal_geo_right_hand[];
+extern const GeoLayout luigi_metal_geo_body[];
+
+extern const GeoLayout luigi_metal_vanish_geo_face_and_wings[];
+extern const GeoLayout luigi_metal_vanish_geo_left_hand[];
+extern const GeoLayout luigi_metal_vanish_geo_right_hand[];
+extern const GeoLayout luigi_metal_vanish_geo_body[];
+
+extern const GeoLayout luigi_geo_load_body[];
+extern const GeoLayout luigi_geo_render_body[];
+
+/**
+ * The final GeoLayout you load in level scripts
+ */
 extern const GeoLayout luigi_geo[];
-extern u8 luigi_mario_button_ci8[];
-extern u8 luigi_mario_button_pal_rgba16[];
-extern u8 luigi_Silver_Cap_ci8[];
-extern u8 luigi_Silver_Cap_pal_rgba16[];
-extern u8 luigi_l_mark_ci8[];
-extern u8 luigi_l_mark_pal_rgba16[];
-extern u8 luigi_l_hige_ia8[];
-extern u8 luigi_l_momi_ci8[];
-extern u8 luigi_l_momi_pal_rgba16[];
-extern u8 luigi_mario_face_1_ci8[];
-extern u8 luigi_mario_face_1_pal_rgba16[];
-extern u8 luigi_meye_2_ci8[];
-extern u8 luigi_meye_2_pal_rgba16[];
-extern u8 luigi_meye_3_ci8[];
-extern u8 luigi_meye_3_pal_rgba16[];
-extern u8 luigi_meye_down_ia8[];
-extern u8 luigi_wingCombined_ia4[];
-extern Vtx luigi_000_offset_bottom_mesh_layer_1_vtx_0[52];
-extern Gfx luigi_000_offset_bottom_mesh_layer_1_tri_0[];
-extern Vtx luigi_000_offset_001_Chest_mesh_layer_1_vtx_0[91];
-extern Gfx luigi_000_offset_001_Chest_mesh_layer_1_tri_0[];
-extern Vtx luigi_000_offset_001_Chest_mesh_layer_1_vtx_1[27];
-extern Gfx luigi_000_offset_001_Chest_mesh_layer_1_tri_1[];
-extern Vtx luigi_000_displaylist_Head_mesh_layer_1_vtx_0[76];
-extern Gfx luigi_000_displaylist_Head_mesh_layer_1_tri_0[];
-extern Vtx luigi_000_displaylist_Head_mesh_layer_1_vtx_1[18];
-extern Gfx luigi_000_displaylist_Head_mesh_layer_1_tri_1[];
-extern Vtx luigi_000_displaylist_Head_mesh_layer_1_vtx_2[11];
-extern Gfx luigi_000_displaylist_Head_mesh_layer_1_tri_2[];
-extern Vtx luigi_000_displaylist_Head_mesh_layer_1_vtx_3[10];
-extern Gfx luigi_000_displaylist_Head_mesh_layer_1_tri_3[];
-extern Vtx luigi_000_displaylist_Head_mesh_layer_1_vtx_4[41];
-extern Gfx luigi_000_displaylist_Head_mesh_layer_1_tri_4[];
-extern Vtx luigi_000_displaylist_Head_mesh_layer_1_vtx_5[12];
-extern Gfx luigi_000_displaylist_Head_mesh_layer_1_tri_5[];
-extern Vtx luigi_switchboneHead_displaylistbone_mesh_layer_1_vtx_0[62];
-extern Gfx luigi_switchboneHead_displaylistbone_mesh_layer_1_tri_0[];
-extern Vtx luigi_switchboneHead_displaylistbone_mesh_layer_1_vtx_1[12];
-extern Gfx luigi_switchboneHead_displaylistbone_mesh_layer_1_tri_1[];
-extern Vtx luigi_switchboneHead_displaylistbone_mesh_layer_1_vtx_2[72];
-extern Gfx luigi_switchboneHead_displaylistbone_mesh_layer_1_tri_2[];
-extern Vtx luigi_switchboneHead_displaylistbone_mesh_layer_1_vtx_3[17];
-extern Gfx luigi_switchboneHead_displaylistbone_mesh_layer_1_tri_3[];
-extern Vtx luigi_switchboneHead_displaylistbone_mesh_layer_1_vtx_4[10];
-extern Gfx luigi_switchboneHead_displaylistbone_mesh_layer_1_tri_4[];
-extern Vtx luigi_000_displaylist_001_RWing_mesh_layer_4_vtx_0[3];
-extern Gfx luigi_000_displaylist_001_RWing_mesh_layer_4_tri_0[];
-extern Vtx luigi_000_displaylist_002_LWing_mesh_layer_4_vtx_0[3];
-extern Gfx luigi_000_displaylist_002_LWing_mesh_layer_4_tri_0[];
-extern Vtx luigi_000_offset_003_LShoulder_mesh_layer_1_vtx_0[20];
-extern Gfx luigi_000_offset_003_LShoulder_mesh_layer_1_tri_0[];
-extern Vtx luigi_000_offset_004_LArm_mesh_layer_1_vtx_0[16];
-extern Gfx luigi_000_offset_004_LArm_mesh_layer_1_tri_0[];
-extern Vtx luigi_000_displaylist_003_LHand_mesh_layer_1_vtx_0[25];
-extern Gfx luigi_000_displaylist_003_LHand_mesh_layer_1_tri_0[];
-extern Vtx luigi_002_switch_option_LOPEN_000_displaylistOption1_LOPEN_mesh_layer_1_vtx_0[40];
-extern Gfx luigi_002_switch_option_LOPEN_000_displaylistOption1_LOPEN_mesh_layer_1_tri_0[];
-extern Vtx luigi_000_offset_006_Rshoulder_mesh_layer_1_vtx_0[20];
-extern Gfx luigi_000_offset_006_Rshoulder_mesh_layer_1_tri_0[];
-extern Vtx luigi_000_offset_007_RArm_skinned_mesh_layer_1_vtx_0[5];
-extern Gfx luigi_000_offset_007_RArm_skinned_mesh_layer_1_tri_0[];
-extern Vtx luigi_000_offset_007_RArm_mesh_layer_1_vtx_0[6];
-extern Gfx luigi_000_offset_007_RArm_mesh_layer_1_tri_0[];
-extern Vtx luigi_000_offset_007_RArm_mesh_layer_1_vtx_1[16];
-extern Gfx luigi_000_offset_007_RArm_mesh_layer_1_tri_1[];
-extern Vtx luigi_000_displaylist_004_Rhand_mesh_layer_1_vtx_0[25];
-extern Gfx luigi_000_displaylist_004_Rhand_mesh_layer_1_tri_0[];
-extern Vtx luigi_002_switch_option_LHandOption1_000_displaylist_003__ROPEN_mesh_layer_1_vtx_0[40];
-extern Gfx luigi_002_switch_option_LHandOption1_000_displaylist_003__ROPEN_mesh_layer_1_tri_0[];
-extern Vtx luigi_002_switch_option_RPEACE_000_displaylist_003__RPEACE_mesh_layer_1_vtx_0[50];
-extern Gfx luigi_002_switch_option_RPEACE_000_displaylist_003__RPEACE_mesh_layer_1_tri_0[];
-extern Vtx luigi_002_switch_option_RCAP_000_displaylist_003_RCAP_mesh_layer_1_vtx_0[25];
-extern Gfx luigi_002_switch_option_RCAP_000_displaylist_003_RCAP_mesh_layer_1_tri_0[];
-extern Vtx luigi_002_switch_option_RCAP_000_displaylist_003_RCAP_mesh_layer_1_vtx_1[42];
-extern Gfx luigi_002_switch_option_RCAP_000_displaylist_003_RCAP_mesh_layer_1_tri_1[];
-extern Vtx luigi_002_switch_option_RCAPHAND_000_displaylist_003_RCAPHAND_mesh_layer_4_vtx_0[6];
-extern Gfx luigi_002_switch_option_RCAPHAND_000_displaylist_003_RCAPHAND_mesh_layer_4_tri_0[];
-extern Vtx luigi_002_switch_option_RCAPHAND_000_displaylist_003_RCAPHAND_mesh_layer_1_vtx_0[25];
-extern Gfx luigi_002_switch_option_RCAPHAND_000_displaylist_003_RCAPHAND_mesh_layer_1_tri_0[];
-extern Vtx luigi_002_switch_option_RCAPHAND_000_displaylist_003_RCAPHAND_mesh_layer_1_vtx_1[42];
-extern Gfx luigi_002_switch_option_RCAPHAND_000_displaylist_003_RCAPHAND_mesh_layer_1_tri_1[];
-extern Vtx luigi_000_offset_009_LThigh_mesh_layer_1_vtx_0[17];
-extern Gfx luigi_000_offset_009_LThigh_mesh_layer_1_tri_0[];
-extern Vtx luigi_000_offset_010_LLeg_mesh_layer_1_vtx_0[12];
-extern Gfx luigi_000_offset_010_LLeg_mesh_layer_1_tri_0[];
-extern Vtx luigi_000_offset_011_LFoot_mesh_layer_1_vtx_0[15];
-extern Gfx luigi_000_offset_011_LFoot_mesh_layer_1_tri_0[];
-extern Vtx luigi_000_offset_012_RThigh_mesh_layer_1_vtx_0[17];
-extern Gfx luigi_000_offset_012_RThigh_mesh_layer_1_tri_0[];
-extern Vtx luigi_000_offset_013_RLeg_mesh_layer_1_vtx_0[12];
-extern Gfx luigi_000_offset_013_RLeg_mesh_layer_1_tri_0[];
-extern Vtx luigi_000_displaylist_005_RFoot_mesh_layer_1_vtx_0[15];
-extern Gfx luigi_000_displaylist_005_RFoot_mesh_layer_1_tri_0[];
-extern Gfx mat_luigi_button_v3[];
-extern Gfx mat_revert_luigi_button_v3[];
-extern Gfx mat_luigi_metal_v3[];
-extern Gfx mat_revert_luigi_metal_v3[];
-extern Gfx mat_luigi_hat_v3[];
-extern Gfx mat_revert_luigi_hat_v3[];
-extern Gfx mat_luigi_skin_v3[];
-extern Gfx mat_revert_luigi_skin_v3[];
-extern Gfx mat_luigi_moustache_v3[];
-extern Gfx mat_revert_luigi_moustache_v3[];
-extern Gfx mat_luigi_hair_v3[];
-extern Gfx mat_revert_luigi_hair_v3[];
-extern Gfx mat_luigi_sideburns_v3[];
-extern Gfx mat_revert_luigi_sideburns_v3[];
-extern Gfx mat_luigi_face_0___Open_Eyes_v3[];
-extern Gfx mat_revert_luigi_face_0___Open_Eyes_v3[];
-extern Gfx mat_luigi_face_1___Half_Eyes_v3[];
-extern Gfx mat_revert_luigi_face_1___Half_Eyes_v3[];
-extern Gfx mat_luigi_face_2___Closed_Eyes_v3[];
-extern Gfx mat_revert_luigi_face_2___Closed_Eyes_v3[];
-extern Gfx mat_luigi_face_7___Dead_Eyes_v3[];
-extern Gfx mat_revert_luigi_face_7___Dead_Eyes_v3[];
-extern Gfx mat_luigi_wingCombined_v3[];
-extern Gfx mat_revert_luigi_wingCombined_v3[];
-extern Gfx mat_luigi_white_v3[];
-extern Gfx mat_revert_luigi_white_v3[];
-extern Gfx mat_luigi_shoes_v3[];
-extern Gfx mat_revert_luigi_shoes_v3[];
-extern Gfx luigi_000_offset_bottom_mesh_layer_1[];
-extern Gfx luigi_000_offset_bottom_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_000_offset_001_Chest_mesh_layer_1[];
-extern Gfx luigi_000_offset_001_Chest_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_000_displaylist_Head_mesh_layer_1[];
-extern Gfx luigi_000_displaylist_Head_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_000_displaylist_Head_mesh_layer_1_mat_override_face_1___Half_Eyes_v3_1[];
-extern Gfx luigi_000_displaylist_Head_mesh_layer_1_mat_override_face_2___Closed_Eyes_v3_2[];
-extern Gfx luigi_000_displaylist_Head_mesh_layer_1_mat_override_face_2___Closed_Eyes_v3_3[];
-extern Gfx luigi_000_displaylist_Head_mesh_layer_1_mat_override_face_7___Dead_Eyes_v3_4[];
-extern Gfx luigi_switchboneHead_displaylistbone_mesh_layer_1[];
-extern Gfx luigi_switchboneHead_displaylistbone_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_switchboneHead_displaylistbone_mesh_layer_1_mat_override_face_1___Half_Eyes_v3_1[];
-extern Gfx luigi_switchboneHead_displaylistbone_mesh_layer_1_mat_override_face_2___Closed_Eyes_v3_2[];
-extern Gfx luigi_switchboneHead_displaylistbone_mesh_layer_1_mat_override_face_2___Closed_Eyes_v3_3[];
-extern Gfx luigi_switchboneHead_displaylistbone_mesh_layer_1_mat_override_face_7___Dead_Eyes_v3_4[];
-extern Gfx luigi_000_displaylist_001_RWing_mesh_layer_4[];
-extern Gfx luigi_000_displaylist_001_RWing_mesh_layer_4_mat_override_metal_v3_0[];
-extern Gfx luigi_000_displaylist_002_LWing_mesh_layer_4[];
-extern Gfx luigi_000_displaylist_002_LWing_mesh_layer_4_mat_override_metal_v3_0[];
-extern Gfx luigi_000_offset_003_LShoulder_mesh_layer_1[];
-extern Gfx luigi_000_offset_003_LShoulder_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_000_offset_004_LArm_mesh_layer_1[];
-extern Gfx luigi_000_offset_004_LArm_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_000_displaylist_003_LHand_mesh_layer_1[];
-extern Gfx luigi_000_displaylist_003_LHand_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_002_switch_option_LOPEN_000_displaylistOption1_LOPEN_mesh_layer_1[];
-extern Gfx luigi_002_switch_option_LOPEN_000_displaylistOption1_LOPEN_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_000_offset_006_Rshoulder_mesh_layer_1[];
-extern Gfx luigi_000_offset_006_Rshoulder_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_000_offset_007_RArm_skinned_mesh_layer_1[];
-extern Gfx luigi_000_offset_007_RArm_skinned_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_000_offset_007_RArm_mesh_layer_1[];
-extern Gfx luigi_000_offset_007_RArm_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_000_displaylist_004_Rhand_mesh_layer_1[];
-extern Gfx luigi_000_displaylist_004_Rhand_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_002_switch_option_LHandOption1_000_displaylist_003__ROPEN_mesh_layer_1[];
-extern Gfx luigi_002_switch_option_LHandOption1_000_displaylist_003__ROPEN_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_002_switch_option_RPEACE_000_displaylist_003__RPEACE_mesh_layer_1[];
-extern Gfx luigi_002_switch_option_RPEACE_000_displaylist_003__RPEACE_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_002_switch_option_RCAP_000_displaylist_003_RCAP_mesh_layer_1[];
-extern Gfx luigi_002_switch_option_RCAP_000_displaylist_003_RCAP_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_002_switch_option_RCAPHAND_000_displaylist_003_RCAPHAND_mesh_layer_4[];
-extern Gfx luigi_002_switch_option_RCAPHAND_000_displaylist_003_RCAPHAND_mesh_layer_4_mat_override_metal_v3_0[];
-extern Gfx luigi_002_switch_option_RCAPHAND_000_displaylist_003_RCAPHAND_mesh_layer_1[];
-extern Gfx luigi_002_switch_option_RCAPHAND_000_displaylist_003_RCAPHAND_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_000_offset_009_LThigh_mesh_layer_1[];
-extern Gfx luigi_000_offset_009_LThigh_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_000_offset_010_LLeg_mesh_layer_1[];
-extern Gfx luigi_000_offset_010_LLeg_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_000_offset_011_LFoot_mesh_layer_1[];
-extern Gfx luigi_000_offset_011_LFoot_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_000_offset_012_RThigh_mesh_layer_1[];
-extern Gfx luigi_000_offset_012_RThigh_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_000_offset_013_RLeg_mesh_layer_1[];
-extern Gfx luigi_000_offset_013_RLeg_mesh_layer_1_mat_override_metal_v3_0[];
-extern Gfx luigi_000_displaylist_005_RFoot_mesh_layer_1[];
-extern Gfx luigi_000_displaylist_005_RFoot_mesh_layer_1_mat_override_metal_v3_0[];
+
+/**
+ * DisplayLists referenced by the geo
+ * (these MUST exist in actors/luigi/model.inc.c or similar)
+ */
+extern const Gfx luigi_cap_on_eyes_front[];
+extern const Gfx luigi_cap_on_eyes_half_closed[];
+extern const Gfx luigi_cap_on_eyes_closed[];
+extern const Gfx luigi_cap_on_eyes_right[];
+extern const Gfx luigi_cap_on_eyes_left[];
+extern const Gfx luigi_cap_on_eyes_up[];
+extern const Gfx luigi_cap_on_eyes_down[];
+extern const Gfx luigi_cap_on_eyes_dead[];
+
+extern const Gfx luigi_cap_wings[];
+extern const Gfx luigi_cap_wings_transparent[];
+
+extern const Gfx luigi_left_hand_closed[];
+extern const Gfx luigi_left_hand_open[];
+extern const Gfx luigi_right_hand_closed[];
+extern const Gfx luigi_right_hand_open[];
+extern const Gfx luigi_right_hand_peace[];
+extern const Gfx luigi_right_hand_cap[];
+extern const Gfx luigi_right_hand_cap_wings[];
+
+extern const Gfx luigi_butt[];
+extern const Gfx luigi_torso[];
+extern const Gfx luigi_left_arm[];
+extern const Gfx luigi_left_forearm_shared_dl[];
+extern const Gfx luigi_right_arm[];
+extern const Gfx luigi_right_forearm_shared_dl[];
+
+extern const Gfx luigi_left_thigh[];
+extern const Gfx luigi_left_leg_shared_dl[];
+extern const Gfx luigi_left_foot[];
+
+extern const Gfx luigi_right_thigh[];
+extern const Gfx luigi_right_leg_shared_dl[];
+extern const Gfx luigi_right_foot[];
+
+/**
+ * Metal / shared metal display lists referenced by metal geos
+ */
+extern const Gfx luigi_metal_cap_on_shared_dl[];
+extern const Gfx luigi_metal_cap_wings[];
+extern const Gfx luigi_metal_cap_wings_transparent[];
+
+extern const Gfx luigi_left_hand_closed_shared_dl[];
+extern const Gfx luigi_left_hand_open_shared_dl[];
+extern const Gfx luigi_metal_right_hand_closed[];
+extern const Gfx luigi_metal_right_hand_open[];
+extern const Gfx luigi_right_hand_peace_shared_dl[];
+extern const Gfx luigi_metal_right_hand_cap_shared_dl[];
+extern const Gfx luigi_metal_right_hand_cap_shared_dl_wings[];
+
+extern const Gfx luigi_metal_butt[];
+extern const Gfx luigi_metal_torso_shared_dl[];
+extern const Gfx luigi_left_arm_shared_dl[];
+extern const Gfx luigi_right_arm_shared_dl[];
+extern const Gfx luigi_metal_left_thigh[];
+extern const Gfx luigi_left_foot_shared_dl[];
+extern const Gfx luigi_right_thigh_shared_dl[];
+extern const Gfx luigi_metal_right_foot[];
+
+#endif // LUIGI_GEO_HEADER_H

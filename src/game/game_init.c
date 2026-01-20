@@ -69,6 +69,9 @@ uintptr_t gPhysicalFramebuffers[3];
 uintptr_t gPhysicalZBuffer;
 
 // Mario Anims and Demo allocation
+
+//s8 gUseLuigiVisuals = 0;
+
 void *gMarioAnimsMemAlloc;
 void *gLuigiAnimsMemAlloc;
 void *gDemoInputsMemAlloc;

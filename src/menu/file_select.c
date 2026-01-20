@@ -21,6 +21,10 @@
 #include "game/rumble_init.h"
 #include "sm64.h"
 #include "text_strings.h"
+#include "src/game/character_select.h"
+// #include "audio/external.h"
+#include "seq_ids.h"
+
 
 #include "eu_translation.h"
 #if MULTILANG
@@ -38,12 +42,158 @@ extern void *languageTable[][3];
  * special menu messages and phases, button states and button clicked checks.
  */
 
+
+static s8 sLuigiUnlockIndex = 0;
+static s8 sLuigiUnlockedThisBoot = 0; // prevents re-trigger spam in same session
+static s8 sFileSelectIsLuigi = 0;     // what the UI shows + what START applies
+static s16 sLuigiUnlockTimer = 0;
+static void play_luigi_unlock_fanfare(void);
+static s8 sSelectedFileIndex = -1;
+static s8 sSelectedFileNum = 0;
+s8 gInFileSelect = 1; // while file_select.c is running
+
+// This is read by the game when you press START to enter gameplay.
+
+#include "game/level_update.h"   // gCurrLevelNum, gCurrSaveFileNum (usually)
+
+// #include "game/save_file.h"    // save_file_is_luigi_unlocked(...) if you have it
+
+// for message timing
+
+// === Luigi unlock sequence ===
+// A,A,A,B,B,B,Up,Down,L,R,Z
+static const u16 sLuigiUnlockSeq[] = {
+    A_BUTTON, A_BUTTON, A_BUTTON,
+    B_BUTTON, B_BUTTON, B_BUTTON,
+    U_JPAD, D_JPAD,
+    L_TRIG, R_TRIG,
+    Z_TRIG,
+};
+
+#define LUIGI_UNLOCK_SEQ_LEN (sizeof(sLuigiUnlockSeq) / sizeof(sLuigiUnlockSeq[0]))
+
+
+static s16 sLuigiUnlockMsgTimer = 0; // frames to show message
+
+// How long to "cooldown" so we don't spam the error sound if they mash
+static s8  sLuigiFailCooldown = 0;
+
+// Pick a sound your repo actually has.
+// If you don't have SOUND_MENU_CAMERA_BUZZ, swap it to one you do have.
+#ifndef LUIGI_FAIL_SOUND
+#define LUIGI_FAIL_SOUND SOUND_MENU_CAMERA_BUZZ
+#endif
+
+static void luigi_unlock_fail_feedback(void) {
+    if (sLuigiFailCooldown == 0) {
+        play_sound(SOUND_MENU_CAMERA_BUZZ, gGlobalSoundSource);
+        sLuigiFailCooldown = 6; // ~6 frames cooldown
+    }
+}
+
+
 // The current sound mode is automatically centered on US and Shindou.
 s16 sSoundTextX;
 
 // Amount of main menu buttons defined in the code called by spawn_object_rel_with_rot.
 // See file_select.h for the names in MenuButtonTypes.
 struct Object *sMainMenuButtons[MENU_BUTTON_OPTION_MAX];
+
+static s32 file_select_get_effective_file_index(void);
+
+static s32 file_select_get_effective_file_index(void) {
+    // sSelectedFileIndex is 0..3 or -1; sSelectedFileNum is 0..3 depending on menu state in your fork
+    if (sSelectedFileIndex >= 0) return sSelectedFileIndex;
+    return sSelectedFileNum;
+}
+
+static void file_select_update_luigi_unlock(void) {
+    // Don’t do anything if already unlocked (for currently “active” file)
+    // We’ll store unlock on whichever file is selected/highlighted.
+    // If no file selected yet, we’ll just use file A (0).
+    s32 fileIndex = (sSelectedFileIndex >= 0) ? sSelectedFileIndex : sSelectedFileNum;
+    if (sLuigiFailCooldown > 0) sLuigiFailCooldown--;
+
+    if (save_file_is_luigi_unlocked(fileIndex)) return;
+
+    // Require at least one star on ANY save file
+    if (!save_file_any_star_exists()) return;
+
+    // Read presses
+    u16 pressed = gPlayer1Controller->buttonPressed;
+    if (pressed == 0) return;
+
+    // Only advance when the *expected* button is included in the pressed mask
+    if (pressed & sLuigiUnlockSeq[sLuigiUnlockIndex]) {
+        sLuigiUnlockIndex++;
+
+        if ((u32)sLuigiUnlockIndex >= (u32)LUIGI_UNLOCK_SEQ_LEN) {
+            sLuigiUnlockIndex = 0;
+
+            save_file_set_luigi_unlocked(fileIndex);
+
+            // Show message for ~3 seconds at 30fps (adjust)
+            sLuigiUnlockMsgTimer = 90;
+
+            play_luigi_unlock_fanfare();
+        }
+    } else {
+        // wrong input resets
+        sLuigiUnlockIndex = 0;
+    }
+
+    if (sLuigiUnlockMsgTimer > 0) {
+        sLuigiUnlockMsgTimer--;
+    } else if (pressed != 0) {
+    // only punish real presses (not "no input")
+    sLuigiUnlockIndex = 0;
+    luigi_unlock_fail_feedback();
+}
+
+}
+
+static void play_luigi_unlock_fanfare(void) {
+    // Use a known-good sound in your fork.
+    // Common choices:
+    // play_sound(SOUND_MENU_STAR_SOUND, gGlobalSoundSource);
+    // play_sound(SOUND_MENU_MARIO_CASTLE_WARP, gGlobalSoundSource);
+
+    play_sound(SOUND_MENU_STAR_SOUND, gGlobalSoundSource);
+}
+
+static void file_select_draw_luigi_unlock_msg(void) {
+    if (sLuigiUnlockMsgTimer <= 0) return;
+
+    // print_generic_string expects const u8*
+    print_generic_string(40, 200, (const u8 *)"YOU SUCCESSFULLY UNLOCK SOMETHING!");
+    print_generic_string(40, 214, (const u8 *)"PRESS L TO SWITCH CHARACTERS");
+}
+
+void file_select_handle_character_toggle(void) {
+    s32 fileIndex = file_select_get_effective_file_index();
+    if (!save_file_any_star_exists()) return;
+
+    if (gPlayer1Controller->buttonPressed & L_TRIG) {
+        sFileSelectIsLuigi ^= 1;
+        gFileSelectCharacterIsLuigi = sFileSelectIsLuigi;
+        gUseLuigiVisuals = sFileSelectIsLuigi;
+        save_file_set_luigi_choice(fileIndex, sFileSelectIsLuigi); // we'll add this
+        save_file_do_save(fileIndex); // or whatever your repo uses to commit
+        play_sound(SOUND_MENU_CLICK_FILE_SELECT, gGlobalSoundSource);
+    }
+}
+
+static void file_select_draw_character_tag(void) {
+    s32 fileIndex = file_select_get_effective_file_index();
+
+    if (save_file_is_luigi_unlocked(fileIndex)) {
+        if (sFileSelectIsLuigi) {
+            print_generic_string(20, 220, (const u8 *)"LUIGI");
+        } else {
+            print_generic_string(20, 220, (const u8 *)"MARIO");
+        }
+    }
+}
 
 // Used to defined yes/no fade colors after a file is selected in the erase menu.
 // sYesNoColor[0]: YES | sYesNoColor[1]: NO
@@ -69,7 +219,7 @@ s16 sCursorClickingTimer = 0;
 s16 sClickPos[] = {-10000, -10000};
 
 // Used for determining which file has been selected during copying and erasing.
-s8 sSelectedFileIndex = -1;
+// s8 sSelectedFileIndex = -1;
 
 // Whether to fade out text or not.
 s8 sFadeOutText = FALSE;
@@ -102,7 +252,7 @@ s8 sAllFilesExist = FALSE;
 
 // Defines the value of the save slot selected in the menu.
 // Mario A: 1 | Mario B: 2 | Mario C: 3 | Mario D: 4
-s8 sSelectedFileNum = 0;
+// s8 sSelectedFileNum = 0;
 
 // Which coin score mode to use when scoring files. 0 for local
 // coin high score, 1 for high score across all files.
@@ -1192,6 +1342,9 @@ void handle_cursor_button_input(void) {
     } else { // If cursor is clicked
         if (gPlayer1Controller->buttonPressed
             & (A_BUTTON | B_BUTTON | START_BUTTON)) {
+            file_select_update_luigi_unlock();
+file_select_handle_character_toggle();
+
             sClickPos[0] = sCursorPos[0];
             sClickPos[1] = sCursorPos[1];
             sCursorClickingTimer = 1;
@@ -2001,6 +2154,8 @@ void print_file_select_strings(void) {
     if (sMainMenuTimer < 1000) {
         sMainMenuTimer++;
     }
+file_select_draw_luigi_unlock_msg();
+file_select_draw_character_tag();
 }
 
 /**
@@ -2053,7 +2208,13 @@ s32 lvl_init_menu_values_and_cursor_pos(UNUSED s32 arg, UNUSED s32 unused) {
  * defined in load_main_menu_save_file.
  */
 s32 lvl_update_obj_and_load_file_selected(UNUSED s32 arg, UNUSED s32 unused) {
+    gFileSelectCharacterIsLuigi = sFileSelectIsLuigi;
+    file_select_update_luigi_unlock();
+file_select_handle_character_toggle();
     area_update_objects();
+    s32 fileIndex = gCurrSaveFileNum - 1; // or your effective index
+gUseLuigiVisuals = save_file_get_luigi_choice(fileIndex);
+
     return sSelectedFileNum;
 }
 

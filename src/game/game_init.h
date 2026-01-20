@@ -93,4 +93,6 @@ void render_init(void);
 void select_gfx_pool(void);
 void display_and_vsync(void);
 
+//extern s8 gUseLuigiVisuals;
+
 #endif // GAME_INIT_H

@@ -59,6 +59,27 @@ STATIC_ASSERT(ARRAY_COUNT(gLevelToCourseNumTable) == LEVEL_COUNT - 1,
 #ifdef EEP
 #include "vc_ultra.h"
 
+// pick a free bit for your fork; 0x40 is an example
+#define SAVE_FLAG_LUIGI_UNLOCKED (1 << 6)
+
+s32 save_file_any_star_exists(void);
+s32 save_file_is_luigi_unlocked(s32 fileIndex);
+void save_file_set_luigi_unlocked(s32 fileIndex);
+
+#define SAVE_FLAG_LUIGI_CHOSEN (1 << 10) // pick a free bit; change if it conflicts
+
+void save_file_set_luigi_choice(s32 fileIndex, s32 isLuigi) {
+    if (isLuigi) {
+        gSaveBuffer.files[fileIndex][0].flags |= SAVE_FLAG_LUIGI_CHOSEN;
+    } else {
+        gSaveBuffer.files[fileIndex][0].flags &= ~SAVE_FLAG_LUIGI_CHOSEN;
+    }
+}
+
+s32 save_file_get_luigi_choice(s32 fileIndex) {
+    return (gSaveBuffer.files[fileIndex][0].flags & SAVE_FLAG_LUIGI_CHOSEN) != 0;
+}
+
 /**
  * Read from EEPROM to a given address.
  * The EEPROM address is computed using the offset of the destination address from gSaveBuffer.
@@ -772,6 +793,31 @@ void check_if_should_set_warp_checkpoint(struct WarpNode *warpNode) {
         gWarpCheckpoint.areaNum = warpNode->destArea;
         gWarpCheckpoint.warpNode = warpNode->destNode;
     }
+}
+
+s32 save_file_any_star_exists(void) {
+    for (s32 i = 0; i < NUM_SAVE_FILES; i++) {
+        if (save_file_exists(i)) {
+            if (save_file_get_total_star_count(i, COURSE_MIN - 1, COURSE_MAX - 1) > 0) {
+                return TRUE;
+            }
+        }
+    }
+    return FALSE;
+}
+
+s32 save_file_is_luigi_unlocked(s32 fileIndex) {
+    if (fileIndex < 0 || fileIndex >= NUM_SAVE_FILES) return FALSE;
+    if (!save_file_exists(fileIndex)) return FALSE;
+    return (gSaveBuffer.files[fileIndex]->flags & SAVE_FLAG_LUIGI_UNLOCKED) != 0;
+}
+
+void save_file_set_luigi_unlocked(s32 fileIndex) {
+    if (fileIndex < 0 || fileIndex >= NUM_SAVE_FILES) return;
+    if (!save_file_exists(fileIndex)) return;
+
+    gSaveBuffer.files[fileIndex]->flags |= SAVE_FLAG_LUIGI_UNLOCKED;
+    save_file_do_save(fileIndex);
 }
 
 /**

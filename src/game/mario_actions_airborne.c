@@ -17,6 +17,8 @@
 
 #include "config.h"
 
+extern s8 gIsLuigi;
+
 void play_flip_sounds(struct MarioState *m, s16 frame1, s16 frame2, s16 frame3) {
     s32 animFrame = m->marioObj->header.gfx.animInfo.animFrame;
     if (animFrame == frame1 || animFrame == frame2 || animFrame == frame3) {
@@ -477,7 +479,13 @@ s32 act_triple_jump(struct MarioState *m) {
 
     play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, 0);
 
-    common_air_action_step(m, ACT_TRIPLE_JUMP_LAND, MARIO_ANIM_TRIPLE_JUMP, 0);
+if (gIsLuigi > 0) {
+    return set_mario_action(m, ACT_TWIRLING, 0);
+}
+    else {
+        common_air_action_step(m, ACT_TRIPLE_JUMP_LAND, MARIO_ANIM_TRIPLE_JUMP, 0);
+    }
+
 #if ENABLE_RUMBLE
     if (m->action == ACT_TRIPLE_JUMP_LAND) {
         queue_rumble_data(5, 40);
@@ -493,7 +501,26 @@ s32 act_backflip(struct MarioState *m) {
     }
 
     play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, SOUND_MARIO_YAH_WAH_HOO);
-    common_air_action_step(m, ACT_BACKFLIP_LAND, MARIO_ANIM_BACKFLIP, 0);
+
+    if (gIsLuigi > 0) {
+    // switch (m->actionArg) {
+    // case 0:
+    //     common_air_action_step(m, ACT_BACKFLIP_LAND, MARIO_ANIM_BACKFLIP, 0);
+    //     if (m->vel[1] < 5.0f) {
+    //         m->actionArg = 1;
+    //     }
+    //     break;
+    //
+    // case 1:
+    //     return set_mario_action(m, ACT_TWIRLING, 0);
+    //     break;
+        return set_mario_action(m, ACT_JUMP, 0);
+    // }
+}
+    else {
+        common_air_action_step(m, ACT_BACKFLIP_LAND, MARIO_ANIM_BACKFLIP, 0);
+    }
+
 #if ENABLE_RUMBLE
     if (m->action == ACT_BACKFLIP_LAND) {
         queue_rumble_data(5, 40);
@@ -614,7 +641,7 @@ s32 act_wall_kick_air(struct MarioState *m) {
 s32 act_long_jump(struct MarioState *m) {
     s32 animation;
     if (!m->marioObj->oMarioLongJumpIsSlow) {
-        animation = MARIO_ANIM_FAST_LONGJUMP;
+        animation = MARIO_ANIM_SLOW_LONGJUMP;
     } else {
         animation = MARIO_ANIM_SLOW_LONGJUMP;
     }
@@ -678,10 +705,27 @@ s32 act_twirling(struct MarioState *m) {
     m->angleVel[1] = approach_s32_symmetric(m->angleVel[1], yawVelTarget, 0x200);
     m->twirlYaw += m->angleVel[1];
 
-    set_mario_animation(m, m->actionArg == 0 ? MARIO_ANIM_START_TWIRL : MARIO_ANIM_TWIRL);
-    if (is_anim_past_end(m)) {
-        m->actionArg = 1;
+     switch (m->actionArg) {
+    case 0:
+        set_mario_animation(m, MARIO_ANIM_DOUBLE_JUMP_RISE);
+        play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, SOUND_MARIO_YAHOO);
+        if (m->vel[1] < 5.0f) {
+            m->actionArg = 1;
+        }
+        break;
+
+    case 1:
+        set_mario_animation(m, MARIO_ANIM_START_TWIRL);
+        if (is_anim_past_end(m)) {
+            m->actionArg = 2;
+        }
+        break;
+
+    case 2:
+        set_mario_animation(m, MARIO_ANIM_TWIRL);
+        break;
     }
+
 
     if (startTwirlYaw > m->twirlYaw) {
         play_sound(SOUND_ACTION_TWIRL, m->marioObj->header.gfx.cameraToObject);
@@ -901,9 +945,11 @@ s32 act_ground_pound(struct MarioState *m) {
     u32 stepResult;
     f32 yOffset;
 
-    play_sound_if_no_flag(m, SOUND_ACTION_THROW, MARIO_ACTION_SOUND_PLAYED);
-
     if (m->actionState == 0) {
+        if (m->vel[1] > 0.0f) {
+            m->vel[1] = 0.0f;
+        }
+
         if (m->actionTimer < 10) {
             yOffset = 20 - 2 * m->actionTimer;
             if (m->pos[1] + yOffset + 160.0f < m->ceilHeight) {
@@ -913,52 +959,40 @@ s32 act_ground_pound(struct MarioState *m) {
             }
         }
 
-        m->vel[1] = -50.0f;
+        stepResult = perform_air_step(m, 0);
         mario_set_forward_vel(m, 0.0f);
+        set_mario_animation(m, m->actionArg == 0 ? MARIO_ANIM_START_GROUND_POUND
+                                                 : MARIO_ANIM_TRIPLE_JUMP_GROUND_POUND);
 
-        set_mario_animation(m, m->actionArg == ACT_ARG_GROUND_POUND_NORMAL ? MARIO_ANIM_START_GROUND_POUND
-                                                                           : MARIO_ANIM_TRIPLE_JUMP_GROUND_POUND);
         if (m->actionTimer == 0) {
-            play_sound(SOUND_ACTION_SPIN, m->marioObj->header.gfx.cameraToObject);
+            play_sound(SOUND_ACTION_THROW, m->marioObj->header.gfx.cameraToObject);
+            play_sound(SOUND_MARIO_WAH2, m->marioObj->header.gfx.cameraToObject);
         }
 
-        m->actionTimer++;
-        if (m->actionTimer >= m->marioObj->header.gfx.animInfo.curAnim->loopEnd + 4) {
-            play_sound(SOUND_MARIO_GROUND_POUND_WAH, m->marioObj->header.gfx.cameraToObject);
-            m->actionState = ACT_STATE_GROUND_POUND_FALL;
+        m->actionTimer += 1;
+
+        if (m->actionTimer >= m->marioObj->header.gfx.animInfo.curAnim->loopEnd + 4
+            || stepResult == AIR_STEP_LANDED) {
+            m->actionState = 1;
         }
     } else {
         set_mario_animation(m, MARIO_ANIM_GROUND_POUND);
 
         stepResult = perform_air_step(m, 0);
         if (stepResult == AIR_STEP_LANDED) {
-            if (should_get_stuck_in_ground(m)) {
-#if ENABLE_RUMBLE
-                queue_rumble_data(5, 80);
-#endif
-                play_sound(SOUND_MARIO_OOOF2, m->marioObj->header.gfx.cameraToObject);
-                m->particleFlags |= PARTICLE_MIST_CIRCLE;
-                set_mario_action(m, ACT_BUTT_STUCK_IN_GROUND, 0);
-            } else {
-                play_mario_heavy_landing_sound(m, SOUND_ACTION_TERRAIN_HEAVY_LANDING);
-                if (!check_fall_damage(m, ACT_HARD_BACKWARD_GROUND_KB)) {
-                    m->particleFlags |= PARTICLE_MIST_CIRCLE | PARTICLE_HORIZONTAL_STAR;
-                    set_mario_action(m, ACT_GROUND_POUND_LAND, 0);
-                }
+            play_sound(SOUND_ACTION_UNK3C, m->marioObj->header.gfx.cameraToObject);
+            if (!check_fall_damage(m, ACT_HARD_BACKWARD_GROUND_KB)) {
+                set_mario_action(m, ACT_GROUND_POUND_LAND, 0);
             }
             set_camera_shake_from_hit(SHAKE_GROUND_POUND);
-        }
-#ifndef DISABLE_GROUNDPOUND_BONK
-        else if (stepResult == AIR_STEP_HIT_WALL) {
+        } else if (stepResult == AIR_STEP_HIT_WALL) {
             mario_set_forward_vel(m, -16.0f);
             if (m->vel[1] > 0.0f) {
                 m->vel[1] = 0.0f;
             }
 
-            m->particleFlags |= PARTICLE_VERTICAL_STAR;
             set_mario_action(m, ACT_BACKWARD_AIR_KB, 0);
         }
-#endif
     }
 
     return FALSE;

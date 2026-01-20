@@ -688,12 +688,13 @@ void focus_on_mario(Vec3f focus, Vec3f pos, f32 posYOff, f32 focYOff, f32 dist, 
  */
 void set_camera_height(struct Camera *c, f32 goalHeight) {
     struct Surface *surface;
-    f32 marioFloorHeight, marioCeilHeight, camFloorHeight;
+    f32 marioFloorHeight;
+    f32 marioCeilHeight;
+    f32 camFloorHeight;
+    UNUSED u8 filler[8];
+    UNUSED s16 action = sMarioCamState->action;
     f32 baseOff = 125.f;
     f32 camCeilHeight = find_ceil(c->pos[0], gLakituState.goalPos[1] - 50.f, c->pos[2], &surface);
-#ifdef FAST_VERTICAL_CAMERA_MOVEMENT
-    f32 approachRate = 20.0f;
-#endif
 
     if (sMarioCamState->action & ACT_FLAG_HANGING) {
         marioCeilHeight = sMarioGeometry.currCeilHeight;
@@ -711,7 +712,7 @@ void set_camera_height(struct Camera *c, f32 goalHeight) {
 
         approach_camera_height(c, goalHeight, 5.f);
     } else {
-        camFloorHeight = find_floor(c->pos[0], c->pos[1] + 100.f, c->pos[2], &surface) + baseOff;
+        camFloorHeight = find_floor(c->pos[0], c->pos[1] + 200.f, c->pos[2], &surface) + baseOff;
         marioFloorHeight = baseOff + sMarioGeometry.currFloorHeight;
 
         if (camFloorHeight < marioFloorHeight) {
@@ -721,22 +722,7 @@ void set_camera_height(struct Camera *c, f32 goalHeight) {
             goalHeight = camFloorHeight;
             c->pos[1] = goalHeight;
         }
-        // Warp camera to goalHeight if further than 1000 and Mario is stuck in the ground
-        if (sMarioCamState->action == ACT_BUTT_STUCK_IN_GROUND ||
-            sMarioCamState->action == ACT_HEAD_STUCK_IN_GROUND ||
-            sMarioCamState->action == ACT_FEET_STUCK_IN_GROUND) {
-            if (absf(c->pos[1] - goalHeight) > 1000.0f) {
-                c->pos[1] = goalHeight;
-            }
-        }
-
-#ifdef FAST_VERTICAL_CAMERA_MOVEMENT
-        approachRate += ABS(c->pos[1] - goalHeight) / 20;
-        approach_camera_height(c, goalHeight, approachRate);
-#else
-        approach_camera_height(c, goalHeight, 20.f);
-#endif
-
+        approach_camera_height(c, goalHeight, 30.f);
         if (camCeilHeight != CELL_HEIGHT_LIMIT) {
             camCeilHeight -= baseOff;
             if ((c->pos[1] > camCeilHeight && sMarioGeometry.currFloorHeight + baseOff < camCeilHeight)
@@ -753,27 +739,22 @@ void set_camera_height(struct Camera *c, f32 goalHeight) {
  */
 s16 look_down_slopes(s16 camYaw) {
     struct Surface *floor;
+    f32 floorDY;
     // Default pitch
     s16 pitch = 0x05B0;
     // x and z offsets towards the camera
     f32 xOff = sMarioCamState->pos[0] + sins(camYaw) * 40.f;
     f32 zOff = sMarioCamState->pos[2] + coss(camYaw) * 40.f;
 
-    f32 floorDY = find_floor(xOff, sMarioCamState->pos[1], zOff, &floor) - sMarioCamState->pos[1];
+    floorDY = find_floor(xOff, sMarioCamState->pos[1], zOff, &floor) - sMarioCamState->pos[1];
 
-    if (floor != NULL) {
-        if (floor->type != SURFACE_WALL_MISC && floorDY > 0) {
-            if (floor->normal.z == 0.f && floorDY < 100.f) {
-                pitch = 0x05B0;
-            } else {
-                // Add the slope's angle of declination to the pitch
-                pitch += atan2s(40.f, floorDY);
-            }
-        }
+    if (floorDY > 0) {
+        pitch += atan2s(40.f, floorDY);
     }
 
     return pitch;
 }
+
 
 /**
  * Look ahead to the left or right in the direction the player is facing
@@ -851,19 +832,19 @@ s32 update_radial_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     f32 cenDistZ = sMarioCamState->pos[2] - c->areaCenZ;
     s16 camYaw = atan2s(cenDistZ, cenDistX) + sModeOffsetYaw;
     s16 pitch = look_down_slopes(camYaw);
-    f32 posY, focusY;
+    UNUSED u8 filler1[4];
+    f32 posY;
+    f32 focusY;
+    UNUSED u8 filler2[8];
     f32 yOff = 125.f;
     f32 baseDist = 1000.f;
 
     sAreaYaw = camYaw - sModeOffsetYaw;
     calc_y_to_curr_floor(&posY, 1.f, 200.f, &focusY, 0.9f, 200.f);
     focus_on_mario(focus, pos, posY + yOff, focusY + yOff, sLakituDist + baseDist, pitch, camYaw);
-#ifdef ENABLE_VANILLA_LEVEL_SPECIFIC_CHECKS
-    camYaw = find_in_bounds_yaw_wdw_bob_thi(pos, focus, camYaw);
-#endif
+
     return camYaw;
 }
-
 /**
  * Update the camera during 8 directional mode
  */
@@ -895,10 +876,17 @@ s32 update_8_directions_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
 void radial_camera_move(struct Camera *c) {
     s16 maxAreaYaw = DEGREES(60);
     s16 minAreaYaw = DEGREES(-60);
-    s16 rotateSpeed = 0x1000;
-    s16 avoidYaw;
+    s16 rotateSpeed = 0x400;
+    s16 avoidYaw = 0;
+    s32 avoidStatus = 0;
+    UNUSED s16 unused1 = 0;
+    UNUSED s32 unused2 = 0;
     f32 areaDistX = sMarioCamState->pos[0] - c->areaCenX;
     f32 areaDistZ = sMarioCamState->pos[2] - c->areaCenZ;
+    UNUSED s32 filler;
+
+    // The angle from the camera to the pivot subtracted from mario's angle
+    s16 turnYaw = gMarioState->faceAngle[1] - atan2s(areaDistZ, areaDistX);
 
     // How much the camera's yaw changed
     s16 yawOffset = calculate_yaw(sMarioCamState->pos, c->pos) - atan2s(areaDistZ, areaDistX);
@@ -910,7 +898,7 @@ void radial_camera_move(struct Camera *c) {
         yawOffset = minAreaYaw;
     }
 
-    // Check if Mario stepped on a surface that rotates the camera. For example, when Mario enters the
+    // Check if mario stepped on a surface that rotates the camera. For example, when mario enters the
     // gate in BoB, the camera turns right to face up the hill path
     if (!(gCameraMovementFlags & CAM_MOVE_ROTATE)) {
         if (sMarioGeometry.currFloorType == SURFACE_CAMERA_MIDDLE
@@ -928,17 +916,13 @@ void radial_camera_move(struct Camera *c) {
     }
 
     if (gCameraMovementFlags & CAM_MOVE_ENTERED_ROTATE_SURFACE) {
-        rotateSpeed = 0x200;
-    }
-
-    if (c->mode == CAMERA_MODE_OUTWARD_RADIAL) {
-        areaDistX = -areaDistX;
-        areaDistZ = -areaDistZ;
+        rotateSpeed = 0x6F;
+        maxAreaYaw = DEGREES(25); // causes the camera to stop sooner when entering snow slider
     }
 
     // Avoid obstructing walls
-    s32 avoidStatus = rotate_camera_around_walls(c, c->pos, &avoidYaw, 0x400);
-    if (avoidStatus == AVOID_STATUS_WALL_COVERING_MARIO) {
+    avoidStatus = rotate_camera_around_walls(c, c->pos, &avoidYaw, 0x400);
+    if (avoidStatus == 3) {
         if (avoidYaw - atan2s(areaDistZ, areaDistX) + DEGREES(90) < 0) {
             avoidYaw += DEGREES(180);
         }
@@ -995,18 +979,34 @@ void radial_camera_move(struct Camera *c) {
             s2ndRotateFlags &= ~CAM_MOVE_ROTATE_LEFT;
         }
     }
+
+    // ! HI GUYS !
+    // this is the main camera turning function
+
     if (!(gCameraMovementFlags & CAM_MOVE_ROTATE)) {
-        // If not rotating, rotate away from walls obscuring Mario from view
+        // If not rotating, rotate away from walls obscuring mario from view
         if (avoidStatus == 3) {
             approach_s16_asymptotic_bool(&sModeOffsetYaw, avoidYaw, 10);
         } else {
+            // sModeOffsetYaw only updates when mario is moving
             if (c->mode == CAMERA_MODE_RADIAL) {
-                // sModeOffsetYaw only updates when Mario is moving
-                rotateSpeed = gMarioStates[0].forwardVel / 32.f * 128.f;
+                /*
+                   rotateSpeed is based on the direction and velocity of mario. if you are moving
+                   parallel to the angle from the camera to the pivot, the camera will NOT turn.
+                   if you are moving adjacent to it, the camera WILL turn.
+
+                   01/12/26 edit: the rotation speed peaks when mario runs diagonally (45 degrees)
+                   relative to the camera pivot. the speed decreases as mario runs more perpendicular,
+                   or at least that's kind of how this is supposed to work
+
+                   the cam's rotatespeed is SUPPOSED to peak at 1024 when mario runs diagonally (as seen
+                   in footage) but i cannot get that to be the case without completely screwing up the
+                   wf and lll spawn camera angles...... xd.
+
+                   so for now it'll have fuckass coefficients tuned to match them.
+                */
+                rotateSpeed = 1024.f * sins(turnYaw) * (0.52f + 0.48f * coss(turnYaw));
                 camera_approach_s16_symmetric_bool(&sModeOffsetYaw, yawOffset, rotateSpeed);
-            }
-            if (c->mode == CAMERA_MODE_OUTWARD_RADIAL) {
-                sModeOffsetYaw = offset_yaw_outward_radial(c, atan2s(areaDistZ, areaDistX));
             }
         }
     }
@@ -1078,7 +1078,9 @@ void update_yaw_and_dist_from_c_up(UNUSED struct Camera *c) {
  */
 void mode_radial_camera(struct Camera *c) {
     Vec3f pos;
+    UNUSED u8 filler1[8];
     s16 oldAreaYaw = sAreaYaw;
+    UNUSED u8 filler2[4];
 
     if (gCameraMovementFlags & CAM_MOVING_INTO_MODE) {
         update_yaw_and_dist_from_c_up(c);
@@ -1098,7 +1100,6 @@ void mode_radial_camera(struct Camera *c) {
         pos[1] += 500.f;
     }
     set_camera_height(c, pos[1]);
-    pan_ahead_of_player(c);
 }
 
 s32 snap_to_45_degrees(s16 angle) {
@@ -1382,39 +1383,27 @@ s32 update_fixed_camera(struct Camera *c, Vec3f focus, UNUSED Vec3f pos) {
     f32 ceilHeight;
     f32 heightOffset;
     f32 distCamToFocus;
+    UNUSED u8 filler2[8];
     f32 scaleToMario = 0.5f;
-    s16 pitch;
-    s16 yaw;
     Vec3s faceAngle;
     struct Surface *ceiling;
     Vec3f basePos;
-
-    play_camera_buzz_if_c_sideways();
+    UNUSED u8 filler[12];
 
     // Don't move closer to Mario in these areas
     switch (gCurrLevelArea) {
-        case AREA_RR:
-            scaleToMario = 0.f;
-            heightOffset = 0.f;
-            break;
 
         case AREA_CASTLE_LOBBY:
-            scaleToMario = 0.3f;
-            heightOffset = 0.f;
-            break;
-
-        case AREA_BBH:
-            scaleToMario = 0.f;
+            scaleToMario = 0.5f;
             heightOffset = 0.f;
             break;
     }
 
     handle_c_button_movement(c);
-    play_camera_buzz_if_cdown();
 
     calc_y_to_curr_floor(&focusFloorOff, 1.f, 200.f, &focusFloorOff, 0.9f, 200.f);
     vec3f_copy(focus, sMarioCamState->pos);
-    focus[1] += focusFloorOff + 125.f;
+    focus[1] += focusFloorOff + 130.f;
     vec3f_get_dist_and_angle(focus, c->pos, &distCamToFocus, &faceAngle[0], &faceAngle[1]);
     faceAngle[2] = 0;
 
@@ -1428,8 +1417,8 @@ s32 update_fixed_camera(struct Camera *c, Vec3f focus, UNUSED Vec3f pos) {
         goalHeight = gLakituState.goalPos[1];
     }
 
-    if (300 > distCamToFocus) {
-        goalHeight += 300 - distCamToFocus;
+    if (250.f > distCamToFocus) {
+        goalHeight += 500.f - (distCamToFocus * 2.f);
     }
 
     ceilHeight = find_ceil(c->pos[0], goalHeight - 100.f, c->pos[2], &ceiling);
@@ -1437,6 +1426,10 @@ s32 update_fixed_camera(struct Camera *c, Vec3f focus, UNUSED Vec3f pos) {
         if (goalHeight > (ceilHeight -= 125.f)) {
             goalHeight = ceilHeight;
         }
+    }
+
+    if (gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) {
+        goalHeight += 400.f;
     }
 
     if (sStatusFlags & CAM_FLAG_SMOOTH_MOVEMENT) {
@@ -1450,14 +1443,6 @@ s32 update_fixed_camera(struct Camera *c, Vec3f focus, UNUSED Vec3f pos) {
 
     c->pos[0] = basePos[0] + (sMarioCamState->pos[0] - basePos[0]) * scaleToMario;
     c->pos[2] = basePos[2] + (sMarioCamState->pos[2] - basePos[2]) * scaleToMario;
-
-    if (scaleToMario != 0.f) {
-        vec3f_get_dist_and_angle(c->focus, c->pos, &distCamToFocus, &pitch, &yaw);
-        if (distCamToFocus > 1000.f) {
-            distCamToFocus = 1000.f;
-            vec3f_set_dist_and_angle(c->focus, c->pos, distCamToFocus, pitch, yaw);
-        }
-    }
 
     return faceAngle[1];
 }

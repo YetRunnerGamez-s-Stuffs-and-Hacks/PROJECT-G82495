@@ -6,6 +6,17 @@
 #include "types.h"
 #include "area.h"
 #include "puppycam2.h"
+// pick a free bit for your fork; 0x40 is an example
+#define SAVE_FLAG_LUIGI_UNLOCKED (1 << 6)
+
+s32 save_file_any_star_exists(void);
+s32 save_file_is_luigi_unlocked(s32 fileIndex);
+void save_file_set_luigi_unlocked(s32 fileIndex);
+s32 save_file_get_luigi_choice(s32 fileIndex);
+void save_file_set_luigi_choice(s32 fileIndex, s32 isLuigi);
+
+
+
 
 #include "course_table.h"
 

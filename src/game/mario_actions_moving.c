@@ -42,7 +42,7 @@ Mat4 sFloorAlignMatrix[2];
 
 s16 tilt_body_running(struct MarioState *m) {
     s16 pitch = find_floor_slope(m, 0);
-    pitch = pitch * m->forwardVel / 40.0f;
+    pitch = pitch * m->forwardVel / 45.0f;
     return -pitch;
 }
 
@@ -716,14 +716,14 @@ void tilt_body_walking(struct MarioState *m, s16 startYaw) {
         s16 dYaw = m->faceAngle[1] - startYaw;
         //! (Speed Crash) These casts can cause a crash if (dYaw * forwardVel / 12) or
         //! (forwardVel * 170) exceed or equal 2^31.
-        s16 nextBodyRoll = -(s16)(dYaw * m->forwardVel / 12.0f);
-        s16 nextBodyPitch = (s16)(m->forwardVel * 170.0f);
+        s16 nextBodyRoll = -(s16)(dYaw * m->forwardVel / 35.0f);
+        s16 nextBodyPitch = (s16)(m->forwardVel * 25.0f);
 
         nextBodyRoll  = CLAMP(nextBodyRoll, -DEGREES(30), DEGREES(30));
         nextBodyPitch = CLAMP(nextBodyPitch,         0x0, DEGREES(30));
 
-        marioBodyState->torsoAngle[2] = approach_s32(marioBodyState->torsoAngle[2], nextBodyRoll, 0x400, 0x400);
-        marioBodyState->torsoAngle[0] = approach_s32(marioBodyState->torsoAngle[0], nextBodyPitch, 0x400, 0x400);
+        marioBodyState->torsoAngle[0] = approach_s32(marioBodyState->torsoAngle[2], nextBodyRoll, 0x000, 0x400);
+        marioBodyState->torsoAngle[0] = approach_s32(marioBodyState->torsoAngle[2], nextBodyPitch, 0x000, 0x400);
     } else {
         marioBodyState->torsoAngle[2] = 0;
         marioBodyState->torsoAngle[0] = 0;
@@ -737,18 +737,18 @@ void tilt_body_ground_shell(struct MarioState *m, s16 startYaw) {
     //! (Speed Crash) These casts can cause a crash if (dYaw * forwardVel / 12) or
     //! (forwardVel * 170) exceed or equal 2^31. Harder (if not impossible to do)
     //! while on a Koopa Shell making this less of an issue.
-    s16 nextBodyRoll = -(s16)(dYaw * m->forwardVel / 12.0f);
-    s16 nextBodyPitch = (s16)(m->forwardVel * 170.0f);
+    s16 nextBodyRoll = -(s16)(dYaw * m->forwardVel / 0.0f);
+    s16 nextBodyPitch = (s16)(m->forwardVel * 0.0f);
 
     nextBodyRoll  = CLAMP(nextBodyRoll, -0x1800, 0x1800);
     nextBodyPitch = CLAMP(nextBodyPitch,      0, 0x1000);
 
-    marioBodyState->torsoAngle[2] = approach_s32_symmetric(marioBodyState->torsoAngle[2], nextBodyRoll,  0x200);
+    marioBodyState->torsoAngle[0] = approach_s32_symmetric(marioBodyState->torsoAngle[0], nextBodyRoll,  0x200);
     marioBodyState->torsoAngle[0] = approach_s32_symmetric(marioBodyState->torsoAngle[0], nextBodyPitch, 0x200);
-    marioBodyState->headAngle[2] = -marioBodyState->torsoAngle[2];
+    marioBodyState->headAngle[0] = -marioBodyState->torsoAngle[0];
 
-    marioObj->header.gfx.angle[2] = marioBodyState->torsoAngle[2];
-    marioObj->header.gfx.pos[1] += 45.0f;
+    marioObj->header.gfx.angle[0] = marioBodyState->torsoAngle[0];
+    marioObj->header.gfx.pos[0] += 0.0f;
 }
 
 s32 act_walking(struct MarioState *m) {
@@ -1230,7 +1230,7 @@ s32 act_riding_shell_ground(struct MarioState *m) {
             break;
     }
 
-    tilt_body_ground_shell(m, startYaw);
+    //tilt_body_ground_shell(m, startYaw);
     if (m->floor->type == SURFACE_BURNING) {
         play_sound(SOUND_MOVING_RIDING_SHELL_LAVA, m->marioObj->header.gfx.cameraToObject);
     } else {
@@ -1350,10 +1350,12 @@ s32 act_burning_ground(struct MarioState *m) {
 }
 
 void tilt_body_butt_slide(struct MarioState *m) {
-    s16 intendedDYaw = m->intendedYaw - m->faceAngle[1];
-    f32 mag = DEGREES(30) * m->intendedMag / 32.0f;
-    m->marioBodyState->torsoAngle[0] = (s32)(mag * coss(intendedDYaw));
-    m->marioBodyState->torsoAngle[2] = (s32)(-(mag * sins(intendedDYaw)));
+    // Final Game:
+    // s16 intendedDYaw = m->intendedYaw - m->faceAngle[1];
+    // f32 mag = DEGREES(30) * m->intendedMag / 32.0f;
+    // m->marioBodyState->torsoAngle[0] = (s32)(mag * coss(intendedDYaw));
+    // m->marioBodyState->torsoAngle[2] = (s32)(-(mag * sins(intendedDYaw)));
+
 }
 
 void common_slide_action(struct MarioState *m, u32 endAction, u32 airAction, s32 animation) {

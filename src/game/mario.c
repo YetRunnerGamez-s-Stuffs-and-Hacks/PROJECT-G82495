@@ -34,8 +34,34 @@
 #include "rumble_init.h"
 
 extern struct DmaHandlerList gLuigiAnimsBuf;
+#include "character_select.h"
 
-s8 gIsLuigi = 0;
+extern s8 gFileSelectCharacterIsLuigi;
+
+extern s8 gInFileSelect;
+// if (!gInFileSelect) return;
+static void mario_toggle_model_on_L(struct MarioState *m);
+
+static void mario_apply_file_select_character_choice(struct MarioState *m) {
+    if (!m) return;
+
+    // Only set once when gameplay starts (first frame Mario exists)
+    // This prevents re-applying if gFileSelectCharacterIsLuigi changes in menus later.
+    static s8 sApplied = 0;
+    if (sApplied) return;
+    sApplied = 1;
+
+    gIsLuigi = gFileSelectCharacterIsLuigi;
+    gUseLuigiVisuals = gIsLuigi;
+
+    if (m->marioObj) {
+        m->marioObj->header.gfx.sharedChild =
+            gLoadedGraphNodes[gIsLuigi ? MODEL_LUIGI : MODEL_MARIO];
+        m->marioObj->header.gfx.animInfo.animID = -1;
+        m->marioObj->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
+        m->marioObj->header.gfx.node.flags |= GRAPH_RENDER_HAS_ANIMATION;
+    }
+}
 
 /**************************************************
  *                    ANIMATIONS                  *
@@ -1703,26 +1729,33 @@ void queue_rumble_particles(struct MarioState *m) {
 #endif
 
 static void mario_toggle_model_on_L(struct MarioState *m) {
-    // L button = Z_TRIG in some forks; but most have L_TRIG.
-    // Try L_TRIG first.
-    if (m->controller->buttonPressed & L_TRIG) {
-        gIsLuigi ^= 1;
-// swap animation source
-    // m->animList = gIsLuigi ? &gLuigiAnimsBuf : &gMarioAnimsBuf;
+    if (!m || !m->controller || !m->marioObj) return;
 
-    // force animation refresh
-    // if (m->marioObj) {
-    //     m->marioObj->header.gfx.animInfo.animID = -1;
-    //     m->marioObj->header.gfx.animInfo.curAnim = NULL;
-    //
-    // }
-        // Swap the model for Mario's object
-        if (m->marioObj) {
-            m->marioObj->header.gfx.sharedChild =
-                gLoadedGraphNodes[gIsLuigi ? MODEL_LUIGI : MODEL_MARIO];
-        }
-    }
+    // Only allow toggling while we're in File Select AND only if the easter egg is unlocked.
+    if (!gInFileSelect) return;
+
+    // Optional: if you have this flag, gate it too:
+    // if (!save_file_is_luigi_unlocked(gCurrSaveFileNum - 1)) return;
+
+    u16 pressed = m->controller->buttonPressed;
+
+#ifdef L_TRIG
+    if (!(pressed & L_TRIG)) return;
+#else
+    return;
+#endif
+
+    gIsLuigi = (gIsLuigi == 0);
+    gUseLuigiVisuals = gIsLuigi;
+
+    m->marioObj->header.gfx.sharedChild =
+        gLoadedGraphNodes[gIsLuigi ? MODEL_LUIGI : MODEL_MARIO];
+
+    m->marioObj->header.gfx.animInfo.animID = -1;
+    m->marioObj->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
+    m->marioObj->header.gfx.node.flags |= GRAPH_RENDER_HAS_ANIMATION;
 }
+
 
 /**
  * Main function for executing Mario's behavior. Returns particleFlags.
@@ -1735,7 +1768,8 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
     vec3f_get_lateral_dist(gMarioState->prevPos, gMarioState->pos, &gMarioState->lateralSpeed);
     vec3f_copy(gMarioState->prevPos, gMarioState->pos);
 
-    mario_toggle_model_on_L(gMarioState);
+    // mario_toggle_model_on_L(gMarioState);
+    mario_apply_file_select_character_choice(gMarioState);
 
     if (gMarioState->action) {
 #ifdef ENABLE_DEBUG_FREE_MOVE
@@ -1827,7 +1861,13 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
  *                  INITIALIZATION                *
  **************************************************/
 
+static void apply_file_select_character_choice(void) {
+    gIsLuigi = gFileSelectCharacterIsLuigi;
+    gUseLuigiVisuals = gIsLuigi;
+}
+
 void init_mario(void) {
+    gIsLuigi = gFileSelectCharacterIsLuigi;
     gMarioState->actionTimer = 0;
     gMarioState->framesSinceA = 0xFF;
     gMarioState->framesSinceB = 0xFF;
